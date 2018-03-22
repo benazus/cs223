@@ -1,0 +1,309 @@
+`timescale 1ns / 1ps
+
+module MotorFsm(input logic clk, start,
+        input logic reverse,
+        input logic [1:0] speed,
+        input logic [1:0] push,
+        output logic [3:0] out,
+        output logic a, b, c, d, e, f, g, dp,
+        output logic [3:0] an,
+        output logic [1:0] show);
+   
+    int count = 0;
+    int x = 0;
+    logic enable = 1'b0;
+    
+    logic [3:0] led1,led2,led3,led4;
+    assign led2 = 4'd0;
+    assign led3 = 4'd0;
+    assign led4 = 4'd0;
+    
+    always_comb
+        case(speed)
+            2'b00: x = 10;
+            2'b01: x = 2000000;
+            2'b10: x = 100000;
+            2'b11: x = 500000;
+        endcase 
+        
+    always@(posedge clk)
+        begin
+            count <= count + 1;
+            if(count == x)
+                begin
+                    count <= 0;
+                    if(x != 10)
+                        enable = 1'b1;
+                end
+            else if(count == 4000000)
+                count <= 1;
+            else
+                enable <= 1'b0;
+        end
+    
+    typedef enum logic [1:0] {S0,S1,S2,S3} statetype;
+    statetype [1:0] currentState, nextState;
+
+    // State Register
+    always_ff@(posedge enable)
+        if(start)
+            currentState <= nextState;
+        else
+            begin
+                if(reverse)
+                    currentState = S3;
+                else
+                    currentState = S0;
+            end
+           
+    // Next State Logic
+    always_comb
+        begin
+            if(reverse == 0)
+                case(currentState)
+                    2'b00: nextState = 2'b01;
+                    2'b01: nextState = 2'b10;
+                    2'b10: nextState = 2'b11;
+                    2'b11: nextState = 2'b00;
+                    default: nextState = 2'b00;
+                endcase
+            else if(reverse == 1)
+                case(currentState)
+                    2'b11: nextState = 2'b10;
+                    2'b10: nextState = 2'b01;
+                    2'b01: nextState = 2'b00;
+                    2'b00: nextState = 2'b11;
+                    default: nextState = 2'b11;
+                endcase
+        end
+        
+        // Output
+        always_comb
+            case(currentState)
+                2'b00: out <= 4'b1100;
+                2'b01: out <= 4'b0110;
+                2'b10: out <= 4'b0011;
+                2'b11: out <= 4'b1001;
+            endcase
+           
+    // 7 seg
+    always_comb
+        case(speed)
+            2'b00: led1 <= 4'd0;
+            2'b01: led1 <= 4'd1;
+            2'b10: led1 <= 4'd2;
+            2'b11: led1 <= 4'd3;
+            default: led1 <= 4'd0;
+        endcase   
+           
+    SevSeg_4digit(enable,led1,led2,led3,led4,a, b, c, d, e, f, g, dp,an);
+    
+    // Push Buttons
+    always_comb
+        case(push)
+            2'b00: show = 2'b00;
+            2'b01: show = 2'b01;
+            2'b10: show = 2'b10;
+            2'b11: show = 2'b00;
+            default: show = 2'b00;
+        endcase
+endmodule
+
+
+
+
+
+
+`timescale 1ns / 1ps
+module Motor(input logic clk,reset,
+        output logic [3:0] out,
+        output logic x);
+
+    typedef enum logic [1:0] {S0,S1,S2,S3} statetype;
+    statetype [1:0] currentState, nextState;
+    
+    // State Register
+    always_ff@(posedge clk)
+        begin
+            currentState <= nextState;
+            if(reset)
+                currentState = S0;
+        end
+        
+    // Next State Logic
+    always_comb
+        begin
+            case(currentState)
+                2'b00:
+                    begin
+                        nextState = 2'b01;
+                        x = 1'b0;
+                    end
+                2'b01: 
+                    begin
+                        nextState = 2'b10;
+                        x = 1'b0;
+                    end
+                2'b10: 
+                    begin
+                        nextState = 2'b11;
+                        x = 1'b0;
+                    end
+                2'b11:
+                    begin
+                        nextState = 2'b00;
+                        x = 1'b1;
+                    end
+                default:
+                    begin
+                        nextState = 2'b00;
+                        x = 1'b0;
+                    end
+            endcase
+        end
+        
+        // Output
+        always_comb
+            case(currentState)
+                2'b00: out <= 4'b1100;
+                2'b01: out <= 4'b0110;
+                2'b10: out <= 4'b0011;
+                2'b11: out <= 4'b1001;
+            endcase
+           
+
+endmodule
+
+
+
+
+
+`timescale 1ns / 1ps
+
+module test();
+
+logic clk, reset;
+logic[3:0] out;
+logic x;
+Motor aq (clk,reset,out,x);
+initial
+begin
+reset = 0; #10;
+reset = 1; #10;
+
+clk = 0; #10;
+clk = 1; #10;
+clk = 0; #10;
+clk = 1; #10;
+clk = 0; #10;
+clk = 1; #10;
+clk = 0; #10;
+clk = 1; #10;
+clk = 0; #10;
+clk = 1; #10;
+clk = 0; #10;
+clk = 1; #10;
+clk = 0; #10;
+clk = 1; #10;
+clk = 0; #10;
+clk = 1; #10;
+clk = 0; #10;
+clk = 1; #10;
+clk = 0; #10;
+clk = 1; #10;
+clk = 0; #10;
+clk = 1; #10;
+clk = 0; #10;
+clk = 1; #10;
+clk = 0; #10;
+clk = 1; #10;
+clk = 0; #10;
+clk = 1; #10;
+end
+endmodule
+
+
+
+
+
+# Clock signal 
+set_property PACKAGE_PIN W5 [get_ports clk]  	 	 	 	  
+ 	set_property IOSTANDARD LVCMOS33 [get_ports clk] 
+create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports clk] 
+
+
+
+# Switches 
+set_property PACKAGE_PIN V17 [get_ports {start}] 	 	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {start}] 
+ 	
+set_property PACKAGE_PIN V16 [get_ports {speed[0]}] 	 	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {speed[0]}] 
+ 	
+set_property PACKAGE_PIN W16 [get_ports {speed[1]}] 	 	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {speed[1]}] 
+ 	
+set_property PACKAGE_PIN W17 [get_ports {reverse}] 	 	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {reverse}] 
+
+
+
+#7 segment display 
+set_property PACKAGE_PIN W7 [get_ports {a}] 	 	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {a}] 
+set_property PACKAGE_PIN W6 [get_ports {b}] 	 	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {b}] 
+set_property PACKAGE_PIN U8 [get_ports {c}] 	 	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {c}] 
+set_property PACKAGE_PIN V8 [get_ports {d}] 	 	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {d}] 
+set_property PACKAGE_PIN U5 [get_ports {e}] 	 	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {e}] 
+set_property PACKAGE_PIN V5 [get_ports {f}] 	 	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {f}] 
+set_property PACKAGE_PIN U7 [get_ports {g}] 	 	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {g}] 
+set_property PACKAGE_PIN V7 [get_ports dp]  	 	 	 	  
+ 	set_property IOSTANDARD LVCMOS33 [get_ports dp]
+ 	 
+set_property PACKAGE_PIN U2 [get_ports {an[0]}] 	 	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {an[0]}] 
+set_property PACKAGE_PIN U4 [get_ports {an[1]}] 	 	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {an[1]}] 
+set_property PACKAGE_PIN V4 [get_ports {an[2]}] 	 	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {an[2]}] 
+set_property PACKAGE_PIN W4 [get_ports {an[3]}] 	 	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {an[3]}] 
+
+
+
+#Sch name = JB1 
+set_property PACKAGE_PIN A14 [get_ports {out[0]}]  	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {out[0]}] 
+
+#Sch name = JB2 
+set_property PACKAGE_PIN B15 [get_ports {out[1]}]  	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {out[1]}]
+
+#Sch name = JB3 
+set_property PACKAGE_PIN A16 [get_ports {out[2]}]  	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {out[2]}] 
+
+##Sch name = JB4 
+set_property PACKAGE_PIN B16 [get_ports {out[3]}]  	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {out[3]}]
+ 	
+ 	
+ 	
+# Push Buttons
+set_property PACKAGE_PIN W19 [get_ports push[0]]  	 	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports push[0]]
+set_property PACKAGE_PIN T17 [get_ports push[1]]  	 	 	 	 	 
+          set_property IOSTANDARD LVCMOS33 [get_ports push[1]]
+ 	
+#push leds
+set_property PACKAGE_PIN U16 [get_ports {show[1]}]  	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {show[1]}] 
+set_property PACKAGE_PIN E19 [get_ports {show[0]}]  	 	 	 	 
+ 	set_property IOSTANDARD LVCMOS33 [get_ports {show[0]}] 
+
