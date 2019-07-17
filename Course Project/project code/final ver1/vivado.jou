@@ -1,0 +1,23 @@
+#-----------------------------------------------------------
+# Vivado v2016.3 (64-bit)
+# SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+# IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+# Start of session at: Mon Dec 26 09:29:18 2016
+# Process ID: 4520
+# Current directory: D:/CS/CS223-224/223/Course Project/demos/final demo 25.12.2016 22.15/final ver1
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent3804 D:\CS\CS223-224\223\Course Project\demos\final demo 25.12.2016 22.15\final ver1\project_decoder.xpr
+# Log file: D:/CS/CS223-224/223/Course Project/demos/final demo 25.12.2016 22.15/final ver1/vivado.log
+# Journal file: D:/CS/CS223-224/223/Course Project/demos/final demo 25.12.2016 22.15/final ver1\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project {D:/CS/CS223-224/223/Course Project/demos/final demo 25.12.2016 22.15/final ver1/project_decoder.xpr}
+open_hw
+connect_hw_server
+open_hw_target
+set_property PROGRAM.FILE {D:/CS/CS223-224/223/Course Project/demos/final demo 25.12.2016 22.15/final ver1/project_decoder.runs/impl_1/Main.bit} [lindex [get_hw_devices xc7a35t_0] 0]
+current_hw_device [lindex [get_hw_devices xc7a35t_0] 0]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7a35t_0] 0]
+set_property PROBES.FILE {} [lindex [get_hw_devices xc7a35t_0] 0]
+set_property PROGRAM.FILE {D:/CS/CS223-224/223/Course Project/demos/final demo 25.12.2016 22.15/final ver1/project_decoder.runs/impl_1/Main.bit} [lindex [get_hw_devices xc7a35t_0] 0]
+program_hw_devices [lindex [get_hw_devices xc7a35t_0] 0]
+refresh_hw_device [lindex [get_hw_devices xc7a35t_0] 0]

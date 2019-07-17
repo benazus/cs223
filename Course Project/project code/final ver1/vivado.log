@@ -1,0 +1,54 @@
+#-----------------------------------------------------------
+# Vivado v2016.3 (64-bit)
+# SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+# IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+# Start of session at: Mon Dec 26 09:29:18 2016
+# Process ID: 4520
+# Current directory: D:/CS/CS223-224/223/Course Project/demos/final demo 25.12.2016 22.15/final ver1
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent3804 D:\CS\CS223-224\223\Course Project\demos\final demo 25.12.2016 22.15\final ver1\project_decoder.xpr
+# Log file: D:/CS/CS223-224/223/Course Project/demos/final demo 25.12.2016 22.15/final ver1/vivado.log
+# Journal file: D:/CS/CS223-224/223/Course Project/demos/final demo 25.12.2016 22.15/final ver1\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project {D:/CS/CS223-224/223/Course Project/demos/final demo 25.12.2016 22.15/final ver1/project_decoder.xpr}
+INFO: [Project 1-313] Project file moved from 'D:/CS/CS223-224/223/Course Project/demos/final demo 24.12.2016 15.13/eski versiyon' since last save.
+Scanning sources...
+Finished scanning sources
+WARNING: [filemgmt 56-2] IP Output Repository Path: Could not find the directory 'D:/CS/CS223-224/223/Course Project/demos/final demo 25.12.2016 22.15/final ver1/project_decoder.cache/ip', nor could it be found using path 'D:/CS/CS223-224/223/Course Project/demos/final demo 24.12.2016 15.13/eski versiyon/project_decoder.cache/ip'.
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2016.3/data/ip'.
+open_project: Time (s): cpu = 00:00:12 ; elapsed = 00:00:08 . Memory (MB): peak = 765.840 ; gain = 125.633
+open_hw
+connect_hw_server
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+INFO: [Labtools 27-2222] Launching hw_server...
+INFO: [Labtools 27-2221] Launch Output:
+
+****** Xilinx hw_server v2016.3
+  **** Build date : Oct 10 2016-19:47:06
+    ** Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+
+
+open_hw_target
+INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Digilent/210183A282A9A
+set_property PROGRAM.FILE {D:/CS/CS223-224/223/Course Project/demos/final demo 25.12.2016 22.15/final ver1/project_decoder.runs/impl_1/Main.bit} [lindex [get_hw_devices xc7a35t_0] 0]
+current_hw_device [lindex [get_hw_devices xc7a35t_0] 0]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7a35t_0] 0]
+INFO: [Labtools 27-1435] Device xc7a35t (JTAG device index = 0) is not programmed (DONE status = 0).
+set_property PROBES.FILE {} [lindex [get_hw_devices xc7a35t_0] 0]
+set_property PROGRAM.FILE {D:/CS/CS223-224/223/Course Project/demos/final demo 25.12.2016 22.15/final ver1/project_decoder.runs/impl_1/Main.bit} [lindex [get_hw_devices xc7a35t_0] 0]
+program_hw_devices [lindex [get_hw_devices xc7a35t_0] 0]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7a35t_0] 0]
+INFO: [Labtools 27-1434] Device xc7a35t (JTAG device index = 0) is programmed with a design that has no supported debug core(s) in it.
+WARNING: [Labtools 27-3123] The debug hub core was not detected at User Scan Chain 1 or 3.
+Resolution: 
+1. Make sure the clock connected to the debug hub (dbg_hub) core is a free running clock and is active OR
+2. Manually launch hw_server with -e "set xsdb-user-bscan <C_USER_SCAN_CHAIN scan_chain_number>" to detect the debug hub at User Scan Chain of 2 or 4. To determine the user scan chain setting, open the implemented design and use: get_property C_USER_SCAN_CHAIN [get_debug_cores dbg_hub].
+ERROR: [Labtools 27-2269] No devices detected on target localhost:3121/xilinx_tcf/Digilent/210183A282A9A.
+Check cable connectivity and that the target board is powered up then
+use the disconnect_hw_server and connect_hw_server to re-register this hardware target.
+ERROR: [Labtoolstcl 44-513] HW Target shutdown. Closing target: localhost:3121/xilinx_tcf/Digilent/210183A282A9A
+exit
+INFO: [Common 17-206] Exiting Vivado at Mon Dec 26 09:31:36 2016...
